@@ -1,8 +1,15 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(scheme_koans C)
+project(scheme_koans C CXX)
 
 include(ExternalProject)
+
+list(APPEND CMAKE_MODULE_PATH
+  "${CMAKE_CURRENT_LIST_DIR}/cmake"
+  /usr/share/cmake-3.0/Modules
+)
+
+include(External_GTest)
 
 ExternalProject_Add(
   chibi-scheme-external
@@ -24,11 +31,14 @@ ExternalProject_Add(
 ExternalProject_Get_Property(chibi-scheme-external install_dir)
 
 add_library(chibi_scheme SHARED IMPORTED)
-set_target_properties(chibi_scheme PROPERTIES
-  IMPORTED_LOCATION ${install_dir}/lib/libchibi-scheme.so
-  INTERFACE_INCLUDE_DIRECTORIES ${install_dir}/include
-)
 add_dependencies(chibi_scheme chibi-scheme-external)
 
-add_executable(main main.c)
+set_target_properties(chibi_scheme PROPERTIES
+  IMPORTED_LOCATION ${install_dir}/lib/libchibi-scheme.so
+)
+
+include_directories(${install_dir}/include)
+
+add_executable(main main.cpp)
 target_link_libraries(main chibi_scheme)
+
