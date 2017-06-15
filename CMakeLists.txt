@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 
 project(scheme_koans C CXX)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(ExternalProject)
 
@@ -10,6 +12,7 @@ list(APPEND CMAKE_MODULE_PATH
 )
 
 include(External_GTest)
+include_directories(${GTEST_INCLUDE_DIRS})
 
 ExternalProject_Add(
   chibi-scheme-external
@@ -42,3 +45,10 @@ include_directories(${install_dir}/include)
 add_executable(main main.cpp)
 target_link_libraries(main chibi_scheme)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+add_executable(run_koans run_koans.cpp)
+target_link_libraries(run_koans
+  chibi_scheme
+  ${GTEST_LIBRARY}
+  ${GTEST_MAIN_LIBRARY}
+)
