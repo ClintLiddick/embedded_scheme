@@ -52,3 +52,5 @@ target_link_libraries(run_koans
   ${GTEST_LIBRARY}
   ${GTEST_MAIN_LIBRARY}
 )
+
+include(External_chez)
