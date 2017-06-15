@@ -9,23 +9,20 @@
 #include "chibi/eval.h"
 #include "gtest/gtest.h"
 
-static constexpr char PROGRAM_ROOT[] = "/home/clint/projects/embedded_scheme/koans/";
-  static sexp ctx;
+static constexpr char PROGRAM_ROOT[] =
+    "/home/clint/projects/embedded_scheme/koans/";
+static sexp ctx;
 
 class KoanTest : public ::testing::Test {
 public:
-  KoanTest() {
-    sexp_load_standard_env(ctx, NULL, SEXP_SEVEN);
-    sexp_load_standard_ports(ctx, NULL, stdin, stdout, stderr, 0);
-    sexp_gc_preserve2(ctx, prog, prog_res);
-  }
+  KoanTest() { sexp_gc_preserve2(ctx, prog, prog_res); }
 
-  ~KoanTest() {
-    sexp_gc_release2(ctx);
-  }
+  ~KoanTest() { sexp_gc_release2(ctx); }
 
   static void SetUpTestCase() {
     ctx = sexp_make_eval_context(NULL, NULL, NULL, 0, 0);
+    sexp_load_standard_env(ctx, NULL, SEXP_SEVEN);
+    sexp_load_standard_ports(ctx, NULL, stdin, stdout, stderr, 0);
   }
 
   // static void TearDownTestCase() {
