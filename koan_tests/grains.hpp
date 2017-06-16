@@ -45,7 +45,10 @@ TEST_F(Grains, 16) {
 TEST_F(Grains, 32) {
   prog_res = sexp_eval(
       ctx, sexp_list2(ctx, prog, sexp_make_unsigned_integer(ctx, 32U)), NULL);
-  EXPECT_EQ(prog_res, sexp_make_unsigned_integer(ctx, 2147483648U));
+  EXPECT_TRUE(sexp_equalp(
+      ctx, prog_res,
+      sexp_string_to_number(ctx, sexp_c_string(ctx, "2147483648U", -1),
+                            SEXP_VOID)));
 }
 
 TEST_F(Grains, 64) {
