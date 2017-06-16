@@ -19,3 +19,27 @@ TEST_F(Conditional, if) {
   prog_res = sexp_eval(ctx, sexp_list2(ctx, prog, SEXP_FALSE), NULL);
   EXPECT_EQ(prog_res, SEXP_ZERO);
 }
+
+TEST_F(Conditional, and) {
+  prog = sexp_intern(ctx, "and-koan", -1);
+  sexp_gc_var1(args);
+  sexp_gc_preserve1(ctx, args);
+
+  args = sexp_list2(ctx, SEXP_TRUE, SEXP_TRUE);
+  prog_res = sexp_eval(ctx, sexp_cons(ctx, prog, args), NULL);
+  EXPECT_EQ(prog_res, SEXP_TRUE);
+
+  args = sexp_list2(ctx, SEXP_TRUE, SEXP_FALSE);
+  prog_res = sexp_eval(ctx, sexp_cons(ctx, prog, args), NULL);
+  EXPECT_EQ(prog_res, SEXP_FALSE);
+
+  args = sexp_list2(ctx, SEXP_FALSE, SEXP_TRUE);
+  prog_res = sexp_eval(ctx, sexp_cons(ctx, prog, args), NULL);
+  EXPECT_EQ(prog_res, SEXP_FALSE);
+
+  args = sexp_list2(ctx, SEXP_FALSE, SEXP_FALSE);
+  prog_res = sexp_eval(ctx, sexp_cons(ctx, prog, args), NULL);
+  EXPECT_EQ(prog_res, SEXP_FALSE);
+
+  sexp_gc_release1(ctx);
+}

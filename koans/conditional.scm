@@ -6,3 +6,5 @@
         ;; 'yes
         ;; 'no)))
 
+(define (and-koan x y)
+    (and x y))
