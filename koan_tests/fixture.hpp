@@ -1,7 +1,3 @@
-// #ifndef KOAN_FIXTURE_HPP
-// #define KOAN_FIXTURE_HPP
-
-// #endif KOAN_FIXTURE_HPP
 #pragma once
 
 #include <string>
@@ -9,9 +5,18 @@
 #include "chibi/eval.h"
 #include "gtest/gtest.h"
 
+static sexp ctx;
+
 static constexpr char PROGRAM_ROOT[] =
     "/home/clint/projects/embedded_scheme/koans/";
-static sexp ctx;
+
+static void EXPECT_STREQ_SEXP(const sexp &var, const char *s) {
+  if (sexp_exceptionp(var)) {
+    sexp_print_exception(ctx, var, sexp_current_error_port(ctx));
+    ASSERT_FALSE(true) << "SEXP is exception";
+  }
+  EXPECT_STREQ(sexp_string_data(var), s);
+}
 
 class KoanTest : public ::testing::Test {
 public:
