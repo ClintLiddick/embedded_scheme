@@ -13,19 +13,15 @@ public:
 TEST_F(Phone, identity) {
   prog_res = sexp_eval(
       ctx, sexp_list2(ctx, prog, sexp_c_string(ctx, "2223334444", -1)), NULL);
-  // ASSERT_FALSE(sexp_exceptionp(prog_res));
-  // EXPECT_STREQ(sexp_string_data(prog_res), "2223334444");
   EXPECT_STREQ_SEXP(prog_res, "2223334444");
 }
 
-// TODO legit
 TEST_F(Phone, remove_leading_ones) {
   prog_res = sexp_eval(
       ctx, sexp_list2(ctx, prog, sexp_c_string(ctx, "12223334444", -1)), NULL);
   EXPECT_STREQ_SEXP(prog_res, "2223334444");
 }
 
-// TODO legit
 TEST_F(Phone, remove_punctuation) {
   prog_res = sexp_eval(
       ctx, sexp_list2(ctx, prog,
