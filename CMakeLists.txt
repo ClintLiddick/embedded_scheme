@@ -17,12 +17,12 @@ include_directories(${GTEST_INCLUDE_DIRS})
 ExternalProject_Add(
   chibi-scheme-external
   GIT_REPOSITORY https://github.com/ashinn/chibi-scheme.git
-  GIT_TAG "0.7.3"
   UPDATE_DISCONNECTED 1
   CONFIGURE_COMMAND ""
   INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}
   BUILD_IN_SOURCE ON
   BUILD_COMMAND make PREFIX=<INSTALL_DIR>
+  BUILD_BYPRODUCTS <INSTALL_DIR>/lib/libchibi-scheme.so
   TEST_BEFORE_INSTALL ON
   TEST_COMMAND make test
   INSTALL_COMMAND make install PREFIX=<INSTALL_DIR>
@@ -49,8 +49,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(run_koans run_koans.cpp)
 target_link_libraries(run_koans
   chibi_scheme
-  ${GTEST_LIBRARY}
-  ${GTEST_MAIN_LIBRARY}
+  ${GTEST_SHARED_LIBRARY}
+  ${GTEST_MAIN_SHARED_LIBRARY}
 )
 
 include(External_chez)

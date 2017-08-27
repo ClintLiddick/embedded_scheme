@@ -3,6 +3,15 @@ find_package(Threads REQUIRED)
 ExternalProject_Add(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
+  BUILD_BYPRODUCTS
+    <BINARY_DIR>/googlemock/gtest/${CMAKE_FIND_LIBRARY_PREFIXES}gtest.a
+    <BINARY_DIR>/googlemock/gtest/${CMAKE_FIND_LIBRARY_PREFIXES}gtest.so
+    <BINARY_DIR>/googlemock/gtest/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main.a
+    <BINARY_DIR>/googlemock/gtest/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main.so
+    <BINARY_DIR>/googlemock/${CMAKE_FIND_LIBRARY_PREFIXES}gmock.a
+    <BINARY_DIR>/googlemock/${CMAKE_FIND_LIBRARY_PREFIXES}gmock.so
+    <BINARY_DIR>/googlemock/${CMAKE_FIND_LIBRARY_PREFIXES}gmock_main.a
+    <BINARY_DIR>/googlemock/${CMAKE_FIND_LIBRARY_PREFIXES}gmock_main.so
   UPDATE_COMMAND ""
   INSTALL_COMMAND ""
   LOG_DOWNLOAD ON
@@ -14,6 +23,8 @@ set(GTEST_INCLUDE_DIRS ${source_dir}/googletest/include)
 set(GMOCK_INCLUDE_DIRS ${source_dir}/googlemock/include)
 
 ExternalProject_Get_Property(googletest binary_dir)
+
+# Static
 set(GTEST_LIBRARY_PATH ${binary_dir}/googlemock/gtest/${CMAKE_FIND_LIBRARY_PREFIXES}gtest.a)
 set(GTEST_LIBRARY gtest)
 add_library(${GTEST_LIBRARY} UNKNOWN IMPORTED)
@@ -45,3 +56,36 @@ set_target_properties(${GMOCK_MAIN_LIBRARY} PROPERTIES
   IMPORTED_LOCATION ${GMOCK_MAIN_LIBRARY_PATH}
   IMPORTED_LINK_INTERFACE_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 add_dependencies(${GMOCK_MAIN_LIBRARY} ${GTEST_LIBRARY})
+
+# shared
+set(GTEST_SHARED_LIBRARY_PATH ${binary_dir}/googlemock/gtest/${CMAKE_FIND_LIBRARY_PREFIXES}gtest.a)
+set(GTEST_SHARED_LIBRARY gtest_shared)
+add_library(${GTEST_SHARED_LIBRARY} UNKNOWN IMPORTED)
+set_target_properties(${GTEST_SHARED_LIBRARY} PROPERTIES
+  IMPORTED_LOCATION ${GTEST_SHARED_LIBRARY_PATH}
+  IMPORTED_LINK_INTERFACE_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+add_dependencies(${GTEST_SHARED_LIBRARY} googletest)
+
+set(GTEST_MAIN_SHARED_LIBRARY_PATH ${binary_dir}/googlemock/gtest/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main.a)
+set(GTEST_MAIN_SHARED_LIBRARY gtest_main_shared)
+add_library(${GTEST_MAIN_SHARED_LIBRARY} UNKNOWN IMPORTED)
+set_target_properties(${GTEST_MAIN_SHARED_LIBRARY} PROPERTIES
+  IMPORTED_LOCATION ${GTEST_MAIN_SHARED_LIBRARY_PATH}
+  IMPORTED_LINK_INTERFACE_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+add_dependencies(${GTEST_MAIN_SHARED_LIBRARY} googletest)
+
+set(GMOCK_SHARED_LIBRARY_PATH ${binary_dir}/googlemock/${CMAKE_FIND_LIBRARY_PREFIXES}gmock.a)
+set(GMOCK_SHARED_LIBRARY gmock_shared)
+add_library(${GMOCK_SHARED_LIBRARY} UNKNOWN IMPORTED)
+set_target_properties(${GMOCK_SHARED_LIBRARY} PROPERTIES
+  IMPORTED_LOCATION ${GMOCK_SHARED_LIBRARY_PATH}
+  IMPORTED_LINK_INTERFACE_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+add_dependencies(${GMOCK_SHARED_LIBRARY} googletest)
+
+set(GMOCK_MAIN_SHARED_LIBRARY_PATH ${binary_dir}/googlemock/${CMAKE_FIND_LIBRARY_PREFIXES}gmock_main.a)
+set(GMOCK_MAIN_SHARED_LIBRARY gmock_main_shared)
+add_library(${GMOCK_MAIN_SHARED_LIBRARY} UNKNOWN IMPORTED)
+set_target_properties(${GMOCK_MAIN_SHARED_LIBRARY} PROPERTIES
+  IMPORTED_LOCATION ${GMOCK_MAIN_SHARED_LIBRARY_PATH}
+  IMPORTED_LINK_INTERFACE_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+add_dependencies(${GMOCK_MAIN_SHARED_LIBRARY} ${GTEST_SHARED_LIBRARY})
