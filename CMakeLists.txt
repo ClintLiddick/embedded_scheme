@@ -46,11 +46,15 @@ add_executable(main main.cpp)
 target_link_libraries(main chibi_scheme)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+enable_testing()
+
 add_executable(run_koans run_koans.cpp)
 target_link_libraries(run_koans
   chibi_scheme
   ${GTEST_SHARED_LIBRARY}
   ${GTEST_MAIN_SHARED_LIBRARY}
 )
+add_test(run_koans run_koans)
 
-include(External_chez)
+# include(External_chez)

@@ -14,10 +14,10 @@ public:
 TEST_F(Conditional, if) {
   prog = sexp_intern(ctx, "if-koan", -1);
   prog_res = sexp_eval(ctx, sexp_list2(ctx, prog, SEXP_TRUE), NULL);
-  EXPECT_EQ(prog_res, SEXP_ONE);
+  EXPECT_EQ(prog_res, SEXP_TRUE);
 
   prog_res = sexp_eval(ctx, sexp_list2(ctx, prog, SEXP_FALSE), NULL);
-  EXPECT_EQ(prog_res, SEXP_ZERO);
+  EXPECT_EQ(prog_res, SEXP_FALSE);
 }
 
 TEST_F(Conditional, and) {

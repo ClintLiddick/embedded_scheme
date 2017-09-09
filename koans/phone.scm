@@ -33,7 +33,3 @@
   (lambda (s)
     (list->string (clean-list (string->list s)))))
 
-;; (display (cleanup "12345"))
-;; (newline)
-;; (display (cleanup "1 2-345"))
-;; (newline)
