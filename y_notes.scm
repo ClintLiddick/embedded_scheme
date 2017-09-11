@@ -28,6 +28,7 @@
  '(1 2))
 
 
+;; Cleanup
 (((lambda (lenf)
     (lambda (li)
       (cond
@@ -39,8 +40,9 @@
         ((null? li) 0)
         (else (+ 1 (lenf (cdr li)))))))
   bottom))
- '(1 2 3))
+ '(1 2))
 
+;; Factor make-lenf and apply manually
 (((lambda (mk-lenf)
     (mk-lenf
      (mk-lenf
@@ -53,7 +55,8 @@
        (+ 1
           (lenf (cdr li))))))))
  '(1 2))
- 
+
+;; Let function use mk-lenf
 (((lambda (mk-lenf)
     (mk-lenf mk-lenf))
   (lambda (mk-lenf)
@@ -64,9 +67,9 @@
         (+ 1
            ((mk-lenf bottom)
             (cdr li))))))))
- '(1 2))
-        
- 
+ '(1))
+
+;; Use "recursively" and we have solution
 (((lambda (mk-lenf)
     (mk-lenf mk-lenf))
   (lambda (mk-lenf)
@@ -79,6 +82,7 @@
             (cdr li))))))))
  '(1 2 3 4))
 
+;; Can we factor "length" function out? Remove need to create length func?
 (((lambda (mk-lenf)
     (mk-lenf mk-lenf))
   (lambda (mk-lenf)
@@ -92,6 +96,7 @@
             (cdr li))))))))
  '(1 2 3 4))
 
+;; Use mk-lenf and pass in recursive lenf
 (((lambda (mk-lenf)
     (mk-lenf mk-lenf))
   (lambda (mk-lenf)
@@ -104,20 +109,23 @@
      (lambda (x)
        ((mk-lenf mk-lenf) x)))))
  '(1 2 3 4))
-     
-(((lambda (lf)
+
+;; Extract length function from out of between the helpers
+(((lambda (lenf-applyer)
     ((lambda (mk-lenf)
        (mk-lenf mk-lenf))
      (lambda (mk-lenf)
-       (lf (lambda (li)
-             ((mk-lenf mk-lenf) li))))))
+       (lenf-applyer
+        (lambda (li)
+          ((mk-lenf mk-lenf) li))))))
   (lambda (lenf)
     (lambda (li)
       (cond
        ((null? li) 0)
-       (else (+ 1 (lenf (cdr li))))))))
+       (else (add1 (lenf (cdr li))))))))
  '(1 2 3 4))
 
+;; Does this pattern have a name?
 (define Y
   (lambda (lf)
     ((lambda (f) (f f))
@@ -125,6 +133,7 @@
        (lf (lambda (x)
              ((f f) x)))))))
 
+;; Nice
 ((Y
   (lambda (lenf)
     (lambda (li)
